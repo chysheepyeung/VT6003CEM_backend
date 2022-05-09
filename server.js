@@ -4,6 +4,7 @@ import cors from '@koa/cors';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser'
 import userRouter from './routes/Accounts/UsersRoute.js'
+import dogRouter from './routes/Dogs/DogsRoute.js';
 
 
 dotenv.config();
@@ -28,6 +29,7 @@ const app = new Koa();
 app.use(cors());
 
 app.use(userRouter.routes());
+app.use(dogRouter.routes());
 
 const port = process.env.PORT || 10888;
 

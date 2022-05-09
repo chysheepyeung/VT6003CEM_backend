@@ -3,10 +3,11 @@ import mongoose from 'mongoose';
 
 const dogSchema = new mongoose.Schema(
     {
-        name: { type: String, required: true, unique: true },
-        pic: { type: String, required: true },
+        name: { type: String, required: true },
+        sex: { type: String, required: true },
+        pic: { type: String },
         breed: { type: String, required: true },
-        age: { type: Int32 },
+        age: { type: Number, required: true },
         intro: { type: String }
     },
     {

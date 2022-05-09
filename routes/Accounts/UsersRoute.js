@@ -1,4 +1,3 @@
-import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import Router from 'koa-router';
 import { getAllUsers, getOneUser, register, deleteUser, updateUser, login } from '../../controllers/Account/UsersController.js'

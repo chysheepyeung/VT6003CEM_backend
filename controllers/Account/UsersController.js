@@ -1,14 +1,14 @@
-import User from '../../model/Account/UserModel.js';
+import User from '../../model/Account/UsersModel.js';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../../utils.js'
 
 const getAllUsers = async function (ctx) {
-    // User.find({}, function (error, users) {
-    //     if (error) {
-    //         response.send(error);
-    //     }
-    //     response.json(users);
-    // });
+    User.find({}, function (error, users) {
+        if (error) {
+            ctx.body = error;
+        }
+        ctx.body = users;
+    });
 };
 
 const register = async function (ctx) {
@@ -18,7 +18,7 @@ const register = async function (ctx) {
         ctx.body = { message: "This email has been used" };
         return;
     }
-    var isAdmin = (ctx.request.body.registerCode != null)
+    var isAdmin = (ctx.request.body.registerCode != null && ctx.request.body.registerCode === "ILOVEDOGS")
     const newUser = new User({
         fname: ctx.request.body.firstName,
         lname: ctx.request.body.lastName,
@@ -31,14 +31,15 @@ const register = async function (ctx) {
         const user = await newUser.save();
         if (user) {
             ctx.status = 201;
-            ctx.body = {
-                fname: user.fname,
-                lname: user.lname,
-                email: user.email,
-                password: user.password,
-                isAdmin: user.isAdmin,
-                token: generateToken(user)
-            }
+            // ctx.body = {
+            //     fname: user.fname,
+            //     lname: user.lname,
+            //     email: user.email,
+            //     password: user.password,
+            //     isAdmin: user.isAdmin,
+            //     token: generateToken(user)
+            // }
+            ctx.body = { ...user._doc, token: generateToken(user) };
             return
         }
     } catch (error) {
@@ -53,14 +54,15 @@ const login = async function (ctx) {
     if (user) {
         if (bcrypt.compareSync(ctx.request.body.password, user.password)) {
             ctx.status = 201;
-            ctx.body = {
-                fname: user.fname,
-                lname: user.lname,
-                email: user.email,
-                password: user.password,
-                isAdmin: user.isAdmin,
-                token: generateToken(user)
-            }
+            // ctx.body = {
+            //     fname: user.fname,
+            //     lname: user.lname,
+            //     email: user.email,
+            //     password: user.password,
+            //     isAdmin: user.isAdmin,
+            //     token: generateToken(user)
+            // }
+            ctx.body = { ...user._doc, token: generateToken(user) };
             return
         }
 
@@ -85,10 +87,10 @@ const getOneUser = async function (ctx) {
 
 
 const updateUser = async function (ctx) {
-    const user = User.findOneAndUpdate({ _id: ctx.request.body._id }, request.body, { new: true });
+    const user = User.findOneAndUpdate({ _id: ctx.request.body._id }, ctx.request.body, { new: true });
     if (user) {
         ctx.status = 201;
-        ctx.body = Object.assign({}, user, { message: 'User Profile Update' });
+        ctx.body = { ...user, message: "User Profile Updated" }
     } else {
         ctx.status = 404;
         ctx.body = { message: 'User Not Found' }
