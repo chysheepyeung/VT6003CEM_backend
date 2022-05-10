@@ -20,7 +20,7 @@ const getAllDog = async function (ctx) {
 
 const getOneDog = async function (ctx) {
     try {
-        const dog = await Dog.findById(ctx.request.body._id);
+        const dog = await Dog.findById(ctx.params.id);
         if (dog) {
             ctx.status = 201;
             ctx.body = dog;
@@ -62,7 +62,7 @@ const createDog = async function (ctx) {
 
 
 const updateDog = async function (ctx) {
-    const dog = Dog.findOneAndUpdate({ _id: ctx.request.body._id }, ctx.request.body, { new: true });
+    const dog = Dog.findOneAndUpdate({ _id: ctx.params.id }, ctx.request.body, { new: true });
     if (dog) {
         ctx.status = 201;
         ctx.body = { ...dog._doc, message: "Dog Profile Updated" }
@@ -74,17 +74,22 @@ const updateDog = async function (ctx) {
 
 
 const deleteDog = async function (ctx) {
-    await Dog.remove({
-        _id: ctx.request.body._id
-    }, function (error, dog) {
-        if (error) {
-            ctx.status = 404;
-            ctx.body = { ...error, message: 'Dog deleted failed' };
-        } else {
-            ctx.status = 201;
+    try {
+        // ctx.body = { message: 'Dog successfully deleted' };
+        const response = await Dog.deleteOne({ _id: ctx.params.id });
+
+        if (response) {
+            ctx.status = 200;
             ctx.body = { message: 'Dog successfully deleted' };
+            console.log(ctx.body)
+            return;
         }
-    });
+
+
+    } catch (error) {
+        ctx.status = 404;
+        ctx.body = { ...error, message: 'Dog deleted failed' };
+    }
 };
 
 export { getAllDog, getOneDog, createDog, updateDog, deleteDog }

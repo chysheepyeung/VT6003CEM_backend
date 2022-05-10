@@ -16,30 +16,33 @@ export const generateToken = (user) => {
     );
 };
 
-export const isAuth = (ctx, next) => {
-    const authorization = ctx.req.headers.authorization;
+export const isAuth = async (ctx, next) => {
+    const authorization = ctx.request.header.authorization;
     if (authorization) {
         const token = authorization.slice(7, authorization.length); // Bearer XXXXXX
-        jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
-            if (err) {
-                ctx.status = 40;
-                ctx.body = { message: 'Invalid Token' };
-            } else {
-                ctx.body = decode;
-                next();
+        try {
+            const decode = jwt.verify(token, process.env.JWT_SECRET)
+            if (decode) {
+                ctx.body = { ...ctx.body, user: decode };
+                await next()
             }
-        });
+        } catch {
+            ctx.status = 401;
+            ctx.body = { message: 'Invalid Token' };
+            return
+        }
+
     } else {
         ctx.status = 401;
-        ctx.user = { message: 'No Token' };
+        ctx.body = { message: 'No Token' };
     }
 };
 
-export const isAdmin = (ctx, next) => {
-    if (ctx.user && ctx.user.isAdmin) {
-        next();
+export const isAdmin = async (ctx, next) => {
+    if (ctx.body.user && ctx.body.user.isAdmin) {
+        await next();
     } else {
         ctx.status = 401;
-        ctx.user = { message: 'Invalid Admin Token' };
+        ctx.body = { message: 'Invalid Admin Token' };
     }
 };

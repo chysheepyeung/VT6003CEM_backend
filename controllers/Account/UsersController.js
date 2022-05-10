@@ -75,7 +75,7 @@ const login = async function (ctx) {
 
 
 const getOneUser = async function (ctx) {
-    const user = await User.findById(ctx.request.body._id);
+    const user = await User.findById(ctx.params.id);
     if (user) {
         ctx.status = 201;
         ctx.body = user;
@@ -87,7 +87,7 @@ const getOneUser = async function (ctx) {
 
 
 const updateUser = async function (ctx) {
-    const user = User.findOneAndUpdate({ _id: ctx.request.body._id }, ctx.request.body, { new: true });
+    const user = User.findOneAndUpdate({ _id: ctx.params.id }, ctx.request.body, { new: true });
     if (user) {
         ctx.status = 201;
         ctx.body = { ...user, message: "User Profile Updated" }
@@ -99,17 +99,16 @@ const updateUser = async function (ctx) {
 
 
 const deleteUser = async function (ctx) {
-    await User.remove({
-        _id: ctx.request.body._id
-    }, function (error, user) {
-        if (error) {
-            ctx.status = 404;
-            ctx.body = error;
-        } else {
+    try {
+        const response = await User.deleteOne({ _id: ctx.params.id });
+        if (response) {
             ctx.status = 201;
-            ctx.body = { message: 'Task successfully deleted' };
+            ctx.body = { message: 'User successfully deleted' };
         }
-    });
+    } catch (error) {
+        ctx.status = 404;
+        ctx.body = { ...error, message: 'User deleted failed' };
+    }
 };
 
 export { getAllUsers, register, login, getOneUser, updateUser, deleteUser }
