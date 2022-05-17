@@ -7,8 +7,8 @@ const dogRouter = Router({ prefix: '/api/dogs' })
 
 dogRouter.get('/', getAllDog);
 dogRouter.get('/:id', getOneDog);
-dogRouter.post('/', bodyParser(), createDog);
-dogRouter.post('/:id', bodyParser(), updateDog);
+dogRouter.post('/', bodyParser(), isAuth, isAdmin, createDog);
+dogRouter.post('/:id', bodyParser(), isAuth, isAdmin, updateDog);
 dogRouter.delete('/:id', isAuth, isAdmin, deleteDog);
 
 export default dogRouter;

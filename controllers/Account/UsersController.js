@@ -18,7 +18,7 @@ const register = async function (ctx) {
         ctx.body = { message: "This email has been used" };
         return;
     }
-    var isAdmin = (ctx.request.body.registerCode != null && ctx.request.body.registerCode === "ILOVEDOGS")
+    var isAdmin = (ctx.request.body.registerCode != null && ctx.request.body.registerCode.toUpperCase() === "ILOVEDOGS")
     const newUser = new User({
         fname: ctx.request.body.firstName,
         lname: ctx.request.body.lastName,
@@ -31,14 +31,6 @@ const register = async function (ctx) {
         const user = await newUser.save();
         if (user) {
             ctx.status = 201;
-            // ctx.body = {
-            //     fname: user.fname,
-            //     lname: user.lname,
-            //     email: user.email,
-            //     password: user.password,
-            //     isAdmin: user.isAdmin,
-            //     token: generateToken(user)
-            // }
             ctx.body = { ...user._doc, token: generateToken(user) };
             return
         }
@@ -54,22 +46,15 @@ const login = async function (ctx) {
     if (user) {
         if (bcrypt.compareSync(ctx.request.body.password, user.password)) {
             ctx.status = 201;
-            // ctx.body = {
-            //     fname: user.fname,
-            //     lname: user.lname,
-            //     email: user.email,
-            //     password: user.password,
-            //     isAdmin: user.isAdmin,
-            //     token: generateToken(user)
-            // }
             ctx.body = { ...user._doc, token: generateToken(user) };
-            return
+            return;
         }
 
-    } else {
-        ctx.status = 401;
-        ctx.body = { message: 'Invalid email or password' };
     }
+
+    ctx.status = 401;
+    ctx.body = { message: 'Invalid email or password' };
+    return;
 
 }
 

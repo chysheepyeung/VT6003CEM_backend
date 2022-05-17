@@ -46,3 +46,19 @@ export const isAdmin = async (ctx, next) => {
         ctx.body = { message: 'Invalid Admin Token' };
     }
 };
+
+
+
+import multer from 'koa-multer';
+import path from 'path';
+
+const storage = multer.diskStorage({
+    destination: 'public/images/',
+    filename(ctx, file, cb) {
+        const filenameArr = file.originalname.split('.');
+        cb(null, Date.now() + '.' + filenameArr[filenameArr.length - 1]);
+    }
+});
+
+export const upload = multer({ storage });
+

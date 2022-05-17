@@ -51,7 +51,7 @@ const createDog = async function (ctx) {
         const dog = await newDog.save();
         if (dog) {
             ctx.status = 201;
-            ctx.body = dog;
+            ctx.body = { ...dog._doc, message: "Create Dog Success" };
             return
         }
     } catch (error) {
@@ -62,7 +62,7 @@ const createDog = async function (ctx) {
 
 
 const updateDog = async function (ctx) {
-    const dog = Dog.findOneAndUpdate({ _id: ctx.params.id }, ctx.request.body, { new: true });
+    const dog = await Dog.findOneAndUpdate({ _id: ctx.params.id }, ctx.request.body, { new: true });
     if (dog) {
         ctx.status = 201;
         ctx.body = { ...dog._doc, message: "Dog Profile Updated" }
@@ -81,7 +81,6 @@ const deleteDog = async function (ctx) {
         if (response) {
             ctx.status = 200;
             ctx.body = { message: 'Dog successfully deleted' };
-            console.log(ctx.body)
             return;
         }
 
