@@ -1,4 +1,7 @@
 import Dog from '../../model/Dog/DogsModel.js'
+import twitter from 'twitter-lite'
+import dotenv from 'dotenv';
+dotenv.config();
 
 const getAllDog = async function (ctx) {
     try {
@@ -52,6 +55,23 @@ const createDog = async function (ctx) {
         if (dog) {
             ctx.status = 201;
             ctx.body = { ...dog._doc, message: "Create Dog Success" };
+
+            if (dog._doc.pic) {
+                const sex = dog._doc.sex == "M" ? "boy" : "girl"
+                const content = `Hi, here's our new ${dog._doc.breed} dog!!! It's name is ${dog._doc.name} and is a ${sex}. Please come to our site to see more details.`
+
+                const config = {
+                    consumer_key: process.env.TWITTER_APPKEY,
+                    consumer_secret: process.env.TWITTER_APPSECRET,
+                    access_token_key: process.env.TWITTER_ACCESSKEY,
+                    access_token_secret: process.env.TWITTER_ACCESSSECRET
+                }
+                const client = new twitter(config);
+                client.readWrite;
+                client.post('statuses/update', { status: content }).then(result => {
+                    console.log('You successfully tweeted this : "' + result.text + '"');
+                }).catch(console.error);
+            }
             return
         }
     } catch (error) {
