@@ -24,6 +24,7 @@ export const isAuth = async (ctx, next) => {
             const decode = jwt.verify(token, process.env.JWT_SECRET)
             if (decode) {
                 ctx.body = { ...ctx.body, user: decode };
+                console.log(decode)
                 await next()
             }
         } catch {
@@ -50,7 +51,6 @@ export const isAdmin = async (ctx, next) => {
 
 
 import multer from 'koa-multer';
-import path from 'path';
 
 const storage = multer.diskStorage({
     destination: 'public/images/',

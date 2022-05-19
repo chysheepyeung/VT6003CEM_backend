@@ -1,0 +1,463 @@
+#http://localhost:10888/api/docs
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: The Canine Shelter
+  description: Canine Shelter provide API
+servers:
+  - url: http://localhost:10888/api
+contact:
+  name: Alvin Cheung
+  email: alvin941028@gmail.com
+license:
+  name: MIT
+consumes:
+  - application/json
+produces:
+  - application/json
+components:
+  securitySchemes:
+    BearerAuth:           
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /login:
+    post:
+      tags:
+          - Account
+      description: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: "string"
+                  example: "username@email.com"
+                password:
+                  type: "string"
+                  example: "secret"
+      responses:
+        "201":
+          description: Register success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      fname:  
+                        type: "string"
+                        example: "alvin"
+                      lname: 
+                        type: "string"
+                        example: "cheung"
+                      email: 
+                        type: "string"
+                        example: "test@gmail.com"
+                      password: 
+                        type: "string"
+                      isAdmin: 
+                        type: "boolean"
+                      _id: 
+                        type: "string"
+                      token:
+                        type: "string"
+                        example: "dfjghjk34h5kjhdfkjdfgklj76l8k"
+        "404":
+          description: Login Fail
+
+  /register:
+    post:
+      tags:
+          - Account
+      description: Register
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                required: 
+                  - firstName
+                  - lastName
+                  - email
+                  - password
+                properties: 
+                  firstName:  
+                    type: "string"
+                  lastName: 
+                    type: "string"
+                  email: 
+                    type: "string"
+                  password: 
+                    type: "string"
+                  registerCode: 
+                    type: "string"
+      responses:
+        "201":
+          description: Register success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      fname:  
+                        type: "string"
+                        example: "alvin"
+                      lname: 
+                        type: "string"
+                        example: "cheung"
+                      email: 
+                        type: "string"
+                        example: "test@gmail.com"
+                      password: 
+                        type: "string"
+                      isAdmin: 
+                        type: "boolean"
+                      _id: 
+                        type: "string"
+                      token:
+                        type: "string"
+                        example: "dfjghjk34h5kjhdfkjdfgklj76l8k"
+        "404":
+          description: Register Fail
+
+  /dogs:
+    get:
+      tags:
+          - Dog
+      description: Get ALL Dog
+      responses:
+        "201":
+          description: Get Dog Success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      name:  
+                        type: "string"
+                      sex: 
+                        type: "string"
+                      breed: 
+                        type: "string"
+                      age: 
+                        type: "number"
+                      intro: 
+                        type: "string"
+                      pic:
+                        type: "string"
+        "404":
+          description: Create Dog Fail
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+          - Dog
+      description: Create a dog
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                required: 
+                  - name
+                  - sex
+                  - breed
+                  - age
+                properties: 
+                  name:  
+                    type: "string"
+                  sex: 
+                    type: "string"
+                  breed: 
+                    type: "string"
+                  age: 
+                    type: "number"
+                  intro: 
+                    type: "string"
+                  pic:
+                    type: "string"
+      responses:
+        "201":
+          description: Create Dog Success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      name:  
+                        type: "string"
+                      sex: 
+                        type: "string"
+                      breed: 
+                        type: "string"
+                      age: 
+                        type: "number"
+                      intro: 
+                        type: "string"
+                      pic:
+                        type: "string"
+        "404":
+          description: Create Dog Fail
+
+  /dogs/{_id}:
+    get:
+      tags:
+          - Dog
+      description: Get a Dog by ID
+      parameters:
+        - in: "path"
+          name: _id
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "201":
+          description: Get Dog Success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      name:  
+                        type: "string"
+                      sex: 
+                        type: "string"
+                      breed: 
+                        type: "string"
+                      age: 
+                        type: "number"
+                      intro: 
+                        type: "string"
+                      pic:
+                        type: "string"
+        "404":
+          description: Get Dog Fail
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+          - Dog
+      description: Update a dog
+      parameters:
+        - in: "path"
+          name: _id
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required: 
+                - name
+                - sex
+                - breed
+                - age
+              properties: 
+                name:  
+                  type: "string"
+                sex: 
+                  type: "string"
+                breed: 
+                  type: "string"
+                age: 
+                  type: "number"
+                intro: 
+                  type: "string"
+                pic:
+                  type: "string"
+      responses:
+        "201":
+          description: Create Dog Success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      name:  
+                        type: "string"
+                      sex: 
+                        type: "string"
+                      breed: 
+                        type: "string"
+                      age: 
+                        type: "number"
+                      intro: 
+                        type: "string"
+                      pic:
+                        type: "string"
+        "404":
+          description: Create Dog Fail
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+          - Dog
+      description: Delete a dog
+      parameters:
+        - in: "path"
+          name: _id
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "201":
+          description: Delete Dog Success
+        "404":
+          description: Delete Dog Fail
+
+  /fav:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+          - Favourite
+      description: Get ALL Favourite by User
+      responses:
+        "201":
+          description: Get ALL Favourite Success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      user:  
+                        type: "string"
+                      dog: 
+                        type: "string"
+        "404":
+          description: Get ALL Favourite Fail
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+          - Favourite
+      description: Add a dog in Favourite
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                required: 
+                  - dog
+                properties: 
+                  dog: 
+                    type: "string"
+      responses:
+        "201":
+          description: Add Dog to Favourite Success
+        "404":
+          description: Create Dog Fail
+
+  /fav/{_id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+          - Favourite
+      description: Check the Dog if it is exist in user favourite list
+      parameters:
+        - in: "path"
+          name: dogId
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "201":
+          description: Check the Dog Success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      result:  
+                        type: "string"
+        "404":
+          description: Check the Dog Fail
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+          - Favourite
+      description: Remove a dog from the favourite list
+      parameters:
+        - in: "path"
+          name: dogId
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "201":
+          description: Remove from favourite list Success
+        "404":
+          description: Remove from favourite list Fail
+
+  /image:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+          - Dog
+      description: Upload a image for dog detail
+      requestBody:
+        required: true
+        content:
+          image:
+            schema:
+              type: string
+              format: binary
+          # multipart/form-data:
+          #   schema:
+          #     type: object
+          #     properties:
+          #       pic:
+          #         type: "string"
+          #         format: binary
+      responses:
+        "201":
+          description: Upload a image success
+          content:
+            application/json:
+              schema:
+                type: "object"
+                properties:
+                  data:
+                    type: "object"
+                    properties:
+                      fullPath:  
+                        type: "string"
+                        example: "http://localhost:3000/public/images/no-pic.jpg"
+        "404":
+          description: Upload a image Fail

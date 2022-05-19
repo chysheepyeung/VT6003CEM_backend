@@ -24,18 +24,24 @@
         "koa-bodyparser": "^4.3.0",
         "koa-mount": "^4.0.0",
         "koa-multer": "^1.0.2",
+        "koa-oai-mongoose": "^2.0.2",
         "koa-passport": "^4.1.4",
         "koa-router": "^10.1.1",
         "koa-send": "^5.0.1",
         "koa-static": "^5.0.0",
+        "koa2-swagger-ui": "^5.5.1",
         "mongodb": "^4.4.1",
         "mongoose": "^6.3.2",
+        "mongoose-to-swagger": "^1.4.0",
         "passport-http": "^0.3.0",
         "path": "^0.12.7",
         "pg": "^8.7.3",
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.17.0",
-        "twitter-lite": "^1.1.0"
+        "swagger2": "^3.0.1",
+        "swagger2-koa": "^3.0.1",
+        "twitter-lite": "^1.1.0",
+        "yamljs": "^0.3.0"
     },
     "devDependencies": {
         "nodemon": "^2.0.16"
