@@ -1,7 +1,7 @@
 import bodyParser from 'koa-bodyparser';
 import Router from 'koa-router';
-import { getAllUsers, getOneUser, register, deleteUser, updateUser, login } from '../../controllers/Account/UsersController.js'
-import { isAdmin, isAuth } from '../../utils.js';
+import { register, login } from '../../controllers/Account/UsersController.js'
+
 
 const userRouter = Router({ prefix: '/api' })
 

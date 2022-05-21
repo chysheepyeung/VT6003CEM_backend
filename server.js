@@ -11,6 +11,7 @@ import favRouter from './routes/Favourite/FavouriteRoute.js';
 
 import yamljs from 'yamljs';
 import { koaSwagger } from 'koa2-swagger-ui';
+import msgRouter from './routes/Message/MessageRoute.js';
 
 const spec = yamljs.load("./api.yaml");
 
@@ -44,6 +45,7 @@ app.use(userRouter.routes());
 app.use(dogRouter.routes());
 app.use(uploadRouter.routes());
 app.use(favRouter.routes());
+app.use(msgRouter.routes());
 
 app.use(mount('/public/images', serve('./public/images')));
 
