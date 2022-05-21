@@ -19,7 +19,6 @@ const register = async function (ctx) {
         return;
     }
     var isAdmin = (ctx.request.body.registerCode != null && ctx.request.body.registerCode.toUpperCase() === "ILOVEDOGS")
-    console.log(ctx.request.body.registerCode)
     const newUser = new User({
         fname: ctx.request.body.firstName,
         lname: ctx.request.body.lastName,
@@ -43,7 +42,6 @@ const register = async function (ctx) {
 };
 
 const login = async function (ctx) {
-    console.log(ctx.request.body)
     const user = await User.findOne({ email: ctx.request.body.email });
     if (user) {
         if (bcrypt.compareSync(ctx.request.body.password, user.password)) {

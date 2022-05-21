@@ -24,7 +24,6 @@ export const isAuth = async (ctx, next) => {
             const decode = jwt.verify(token, process.env.JWT_SECRET)
             if (decode) {
                 ctx.body = { ...ctx.body, user: decode };
-                console.log(decode)
                 await next()
             }
         } catch {
